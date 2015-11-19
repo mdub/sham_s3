@@ -51,7 +51,7 @@ describe ShamS3::App do
       expect(bucket).to_not exist
     end
 
-    xit "can be created" do
+    it "can be created" do
       s3.create_bucket(:bucket => bucket_name)
       expect(bucket).to exist
     end
