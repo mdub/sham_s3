@@ -8,14 +8,12 @@ describe ShamS3::App do
 
   before do
     ENV["RACK_ENV"] = "test"
-    ShamRack.allow_network_connections = false
+    ShamRack.prevent_network_connections
     ShamRack.at("s3.amazonaws.com").mount(sham_s3_app)
-    ShamRack.at("foo.s3-ap-southeast-2.amazonaws.com", 443).mount(sham_s3_app)
   end
 
   after do
-    ShamRack.unmount_all
-    ShamRack.allow_network_connections = true
+    ShamRack.reset
   end
 
   let(:region) { "ap-southeast-2" }

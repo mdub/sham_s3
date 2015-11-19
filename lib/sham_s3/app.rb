@@ -9,7 +9,7 @@ module ShamS3
     end
 
     before do
-      puts "#{request.request_method} #{request.url}" if settings.verbose?
+      puts "#{request.request_method} #{request.url} #{params.inspect}" if settings.verbose?
     end
 
     head "/*" do
@@ -17,6 +17,10 @@ module ShamS3
     end
 
     get "/*" do
+      halt 404
+    end
+
+    put "/*" do
       halt 404
     end
 
