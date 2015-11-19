@@ -1,8 +1,10 @@
 # ShamS3
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sham_s3`. To experiment with that code, run `bin/console` for an interactive prompt.
+ShamS3 is a fake version of S3, intended for use as a test stub.  
 
-TODO: Delete this and the text above, and describe your gem
+ShamS3 is implemented as a Rack app, and so can be run with any Rack
+app-server.  Even better, it can be used with ShamRack or WebMock, for
+in-processing stubbing of S3 calls.
 
 ## Installation
 
@@ -22,7 +24,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Typical usage is:
+
+```ruby
+require 'sham_s3'
+s3_sham = ShamS3.new
+
+require 'sham_rack'
+ShamRack.at("s3.amazonaws.com").mount(s3_sham)
+
+require 'aws-sdk-resources'
+s3 = Aws::S3::Resource.new
+# ... do stuff with s3 ...
+```
 
 ## Development
 
@@ -32,10 +46,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sham_s3.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/mdub/sham_s3.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
