@@ -6,8 +6,6 @@ require 'sham_s3'
 
 describe ShamS3::App do
 
-  let(:sham_s3_app) { ShamS3::App.new }
-
   before do
     ENV["RACK_ENV"] = "test"
     ShamRack.allow_network_connections = false
@@ -27,10 +25,16 @@ describe ShamS3::App do
       config[:access_key_id] = "key"
       config[:secret_access_key] = "secret"
       config[:region] = region
-      if ENV["AWS_SDK_DEBUG"]
+      if ENV["SHAM_S3_DEBUG"]
         config[:logger] = Logger.new(STDERR)
         config[:log_level] = :debug
       end
+    end
+  end
+
+  let(:sham_s3_app) do
+    ShamS3::App.new.tap do |app|
+      app.settings.verbose = true if ENV["SHAM_S3_DEBUG"]
     end
   end
 
