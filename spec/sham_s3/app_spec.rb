@@ -6,10 +6,12 @@ require 'sham_s3'
 
 describe ShamS3::App do
 
+  let(:sham_s3_hostname) { "sham-s3.example.com" }
+
   before do
     ENV["RACK_ENV"] = "test"
     ShamRack.prevent_network_connections
-    ShamRack.at("s3.amazonaws.com").mount(sham_s3_app)
+    ShamRack.at(sham_s3_hostname).mount(sham_s3_app)
   end
 
   after do
@@ -23,6 +25,8 @@ describe ShamS3::App do
       config[:access_key_id] = "key"
       config[:secret_access_key] = "secret"
       config[:region] = region
+      config[:endpoint] = "http://#{sham_s3_hostname}"
+      config[:force_path_style] = true
       if ENV["SHAM_S3_DEBUG"]
         config[:logger] = Logger.new(STDERR)
         config[:log_level] = :debug
@@ -42,10 +46,6 @@ describe ShamS3::App do
 
     let(:bucket_name) { "foo"}
     let(:bucket) { s3.bucket(bucket_name) }
-
-    before do
-      ShamRack.at("#{bucket_name}.s3-#{region}.amazonaws.com", 443).mount(sham_s3_app)
-    end
 
     it 'does not exist' do
       expect(bucket).to_not exist
