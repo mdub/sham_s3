@@ -32,7 +32,12 @@ module ShamS3
 
     put "/:bucket" do
       settings.buckets[bucket_name] = {}
-      halt 200
+      headers "Location" => "/#{bucket_name}"
+      status 200
+    end
+
+    post "/*" do
+      halt 404
     end
 
   end

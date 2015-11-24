@@ -42,10 +42,10 @@ describe ShamS3::App do
 
   let(:s3) { Aws::S3::Resource.new(aws_config) }
 
-  describe "bucket" do
+  let(:bucket_name) { "foo"}
+  let(:bucket) { s3.bucket(bucket_name) }
 
-    let(:bucket_name) { "foo"}
-    let(:bucket) { s3.bucket(bucket_name) }
+  describe "bucket" do
 
     it 'does not exist' do
       expect(bucket).to_not exist
@@ -54,6 +54,25 @@ describe ShamS3::App do
     it "can be created" do
       s3.create_bucket(:bucket => bucket_name)
       expect(bucket).to exist
+    end
+
+  end
+
+  describe "object" do
+
+    before do
+      s3.create_bucket(:bucket => bucket_name)
+    end
+
+    let(:object_name) { "anne_object"}
+    let(:object) { bucket.objects(object_name) }
+
+    context "before being written" do
+
+      xit 'does not exist' do
+        expect(object).to_not exist
+      end
+
     end
 
   end
